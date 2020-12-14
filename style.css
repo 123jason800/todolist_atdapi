@@ -1,0 +1,62 @@
+/* Background */
+body {
+    height:100vh;
+    background-image: url('shooting_star_unsplash.jpg');
+    font-family: 'Carme', sans-serif;
+
+}
+
+
+/* Main Card */
+
+.task-card {
+    background: rgb(255, 254, 254);
+    box-shadow: 2px 3px 3px #000;
+}
+
+
+/* Typography */
+h1 {
+    color: #fff;
+    text-shadow: 5px 5px 1px rgba(0, 0, 0, 0.842);
+    font-size: 64px;
+    margin-bottom: 48px;
+  
+}
+/* Form */
+form {
+    background: rgba(245, 245, 245, 0.904);
+}
+
+/* Close Button */
+.button-close {
+    border: 0;
+    font-size: 36px;
+    color: rgb(255, 255, 255);
+    border-radius: 50%;
+    padding: 10px 15px;
+    background: rgba(251, 251, 251, 0.144);
+    box-shadow: 2px 3px 3px rgba(0, 0, 0, 0.308);
+}
+button:focus,
+button:hover {
+    cursor: pointer;
+    outline: none;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* Completed Background */
+.bg-completed {
+    background: rgb(211, 255, 211);
+}
+
+.bg-incompleted {
+    background: rgb(255, 212, 212);
+}
+
