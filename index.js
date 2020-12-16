@@ -4,9 +4,6 @@ var cardSpace = $('#card-space');
 var cardInput = $('.card-item-input');
 
 
-
-
-
 // Adds Event handler to each card(note) when user focus out of input. It will then update to server
 var onUpdateInput = function(card,note) {
   card.find('.card-item-input').on('focusout',function() {
