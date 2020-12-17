@@ -51,7 +51,27 @@ form {
 }
 
 /* Buttons */
+.button-add {
+    border-width: 2px;
+    border-radius: 50%;
+    padding: 5px 25px;
+    color: #fff;
+    border: 2px solid #fff;
+ 
+    font-size: 64px;
+   
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    background: transparent;
+    transition: .5s ease-in-out;
+}
 
+
+.button-add:hover {
+   color: rgba(143, 137, 137, 0.431);
+   border: 2px solid rgba(143, 137, 137, 0.431);
+}
 
 .button-close {
     border-radius: 50%;
