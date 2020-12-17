@@ -19,8 +19,19 @@
 <body class="uk-background-cover">
     <div class="uk-container">
         <h1 class="uk-text-center">To Do List</h1>
+        <div class="uk-grid">
+            <div class="uk-width-auto@m">
+            <button class="category-active note-category">All</button>
+            </div>
+            <div class="uk-width-auto@m">
+                <button data-id="2" class="note-category">Active</button>
+            </div>
+            <div class="uk-width-auto@m">
+                <button data-id="3" class="note-category">Completed</button>
+            </div>
+        </div>
         <div id="card-space" class="uk-grid text-right">
-            <div class="uk-width-1-6 center">
+            <div class="uk-width-1-4 center">
                 <button id="create-note" class="fas fa-plus button-close"></button>
             </div>
         </div>

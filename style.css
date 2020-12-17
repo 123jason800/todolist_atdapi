@@ -1,7 +1,7 @@
 /* Background */
 body {
     
-    background-image: url('shooting_star_unsplash.jpg');
+    background-image: url('solid_bg.jpg');
     font-family: 'Carme', sans-serif;
     height: 100%;
     min-height: 100vh;
@@ -31,8 +31,10 @@ body {
    font-size: 14px;
    color: #666;
    width: 90%;
-   font-size: 24px;
+   font-size: 20px;
 }
+
+
 
 
 /* Typography */
@@ -63,11 +65,12 @@ form {
 /* Delete Button */
 .delete-button {
     width: 100%;
-    border: 2px solid rgb(151, 21, 21);
     color: rgb(255, 255, 255);
     font-size:  16px;
-    border-top: 2px solid rgb(151, 21, 21);
-    background: rgb(151, 14, 14);
+    background: rgb(218, 27, 2);
+    border: 2px solid rgb(218, 27, 2);
+    padding: 10px;
+
 }
 
 
@@ -96,9 +99,9 @@ textarea:focus {
     background: rgb(211, 255, 211); 
 }
 
-/* .bg-incompleted {
-    background: rgb(255, 212, 212);
-} */
+.bg-completed .card-item-input {
+    text-decoration: line-through;
+}
 
 .bg-editing {
     background: rgb(255, 243, 191)!important;
@@ -115,7 +118,10 @@ textarea:focus {
 
 }
 
-
+label[for="complete"] {
+    font-size: 16px;
+    color: #000;
+}
 
 
 @keyframes blink-animation {
@@ -123,3 +129,25 @@ textarea:focus {
       visibility: hidden;
     }
   }
+
+/* Note Categories */
+.note-category {
+    background: transparent;
+    border: 2px solid rgba(143, 137, 137, 0.431);
+    border-radius: 30px;
+    margin: 0;
+    font: inherit;
+    display: inline-block;
+    padding: 0 30px;
+    line-height: 38px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: .5s ease-in-out;
+    
+
+}
+
+.category-active {
+    border: 2px solid white;
+}

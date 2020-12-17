@@ -2,8 +2,9 @@
 var createNoteBtn = $('#create-note');
 var cardSpace = $('#card-space');
 var cardInput = $('.card-item-input');
-
-
+var apiKey = '242';
+var categoryBtn = $('.note-category')
+var cards = [];
 // Adds Event handler to each card(note) when user focus out of input. It will then update to server
 var onUpdateInput = function(card,note) {
   card.find('.card-item-input').on('focusout',function() {
@@ -17,10 +18,27 @@ var onUpdateInput = function(card,note) {
   });
 }
 
+// Filter cards from screen base on category active
+var filterCards = function() {
+  var tempCards = cards;
+  var id = $('.category-active').data('id');
+  if (id === 2 ) {
+    tempCards = cards.filter(function(element){ return !$(element).find('.complete-checkbox').is(':checked');});
+  }
+
+  else if (id === 3) {
+    tempCards = cards.filter(function(element){ return $(element).find('.complete-checkbox').is(':checked');});
+  }
+
+  $('.card').remove();
+  tempCards.forEach(function(item){
+    cardSpace.append($(item));
+  })
+}
 // creates a new card an return the style of our card/note.
 var createNoteTemplate = function() {
-    var newCard = $(` <div class="card uk-width-1-5 uk-margin-bottom">
-                        <div class="card-item uk-height-1-1 uk-position-relative uk-card task-card uk-margin-bottom">
+    var newCard = $(` <div class="card uk-width-1-4 uk-margin-bottom">
+                        <div class="card-item uk-height-1-1 uk-position-relative uk-card task-card">
                             <div class="uk-card-body uk-position-relative uk-padding-small">
                                 <textarea rows="6" class="card-item-input"></textarea>
                             </div>
@@ -55,9 +73,8 @@ var addInfoToCard = function(card,text,completed,id) {
                             <label for="complete">Completed?</label>
                             <input data-id=${id} class="complete-checkbox" name="complete" type="checkbox" ${completed?'checked':''}>
                         </div>
-                        <div class="uk-width-1-1 card-item-bottom uk-position-absolute">
-                              <button data-id=${id} class="delete-button">Delete</button>
-                        <div>`);
+                          <button data-id=${id} class="delete-button"><i class="fas fa-lg fa-trash"></i></button>
+                        `);
   card.find('.card-item').append(bottomOfCard);
   card.find('.card-item-input').text(text);
  
@@ -66,10 +83,10 @@ var addInfoToCard = function(card,text,completed,id) {
 var getNotes = function() {
   $.ajax({
     type: 'GET',
-    url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=242',
+    url: `https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=${apiKey}`,
     dataType: 'json',
     success: function (response, textStatus) {
-      response['tasks'].forEach(function(note){
+      cards = response['tasks'].map(function(note){
         var card = createNoteTemplate();
         addInfoToCard(card,note['content'],note['completed'],note['id']);
         if(note['completed']) {
@@ -77,6 +94,7 @@ var getNotes = function() {
         }
         cardSpace.append(card);
         onUpdateInput(card,note);
+        return card;
       });
     },
     error: function (request, textStatus, errorMessage) {
@@ -89,7 +107,7 @@ var postData = function(card,text) {
   card.find('.card-item').toggleClass('bg-updating');
   $.ajax({
     type: 'POST',
-    url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=242',
+    url:`https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=${apiKey}`,
     contentType: 'application/json',
     dataType: 'json',
     data: JSON.stringify({
@@ -100,8 +118,10 @@ var postData = function(card,text) {
     success: function (response, textStatus) {
       var note = response['task'];
       addInfoToCard(card,note['content'],note['completed'],note['id']);
+      cards.push(card);
       onUpdateInput(card,note);
       card.find('.card-item').toggleClass('bg-updating');
+      filterCards();
     },
     error: function (request, textStatus, errorMessage) {
       console.log(errorMessage);
@@ -109,11 +129,10 @@ var postData = function(card,text) {
   });
 }
 
-
 var getData = function() {
   $.ajax({
     type: 'GET',
-    url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=242',
+    url: `https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=${apiKey}`,
     dataType: 'json',
     success: function (response, textStatus) {
       console.log(response);
@@ -127,9 +146,11 @@ var getData = function() {
 var deleteData = function(id,card) {
   $.ajax({
     type: 'DELETE',
-    url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${id}?api_key=242`,
+    url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${id}?api_key=${apiKey}`,
     success: function (response, textStatus) {
+      cards = cards.filter(function(element){return !card.is($(element))});
       card.remove();
+      filterCards();
     },
     error: function (request, textStatus, errorMessage) {
       console.log(errorMessage);
@@ -141,7 +162,7 @@ var updateData = function(id,text,card) {
   card.find('.card-item').toggleClass('bg-updating');
   $.ajax({
     type: 'PUT',
-    url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${id}?api_key=242`,
+    url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${id}?api_key=${apiKey}`,
     contentType: 'application/json',
     dataType: 'json',
     data: JSON.stringify({
@@ -166,10 +187,11 @@ var updateCheckBox = function(id,checked,card) {
   if (checked) {
     $.ajax({
       type: 'PUT',
-      url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${id}/mark_complete?api_key=242`,
+      url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${id}/mark_complete?api_key=${apiKey}`,
       success: function (response, textStatus) {
         card.find('.card-item').toggleClass('bg-updating');
         card.find('.card-item').toggleClass('bg-completed');
+        filterCards();
       },
       error: function (request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -180,10 +202,11 @@ var updateCheckBox = function(id,checked,card) {
   else {
     $.ajax({
       type: 'PUT',
-      url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${id}/mark_active?api_key=242`,
+      url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${id}/mark_active?api_key=${apiKey}`,
       success: function (response, textStatus) {
         card.find('.card-item').toggleClass('bg-updating');
         card.find('.card-item').toggleClass('bg-completed');
+        filterCards();
       },
       error: function (request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -232,6 +255,20 @@ cardSpace.on('change','.complete-checkbox',function(){
   var card = $(this).closest('.card');
   updateCheckBox(id,checked,card);
 });
+
+// Users clicks on category. Should filter notes and set that button as active
+categoryBtn.on('click', function(){
+  // Adds active class to current button.
+  if (!$(this).hasClass('category-active')) {
+    $('.category-active').removeClass('category-active');
+    $(this).toggleClass("category-active");
+  }
+  filterCards();
+})
+
+
+
+
 
 // Show Current Notes in DataBase
 getNotes();
